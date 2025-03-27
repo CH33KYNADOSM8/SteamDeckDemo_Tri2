@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     RickyRolls playerInput;
-    InputAction moveInput, fireInput, exitInput;
+    InputAction moveInput, lookInput, fireInput, exitInput;
     [SerializeField] Transform childBody;
 
     private ShootProjectile shootProjectile;
@@ -37,6 +38,9 @@ public class Player : MonoBehaviour
         moveInput = playerInput.Player.Move;
         moveInput.Enable();
 
+        lookInput = playerInput.Player.Look;
+        lookInput.Enable();
+
         fireInput = playerInput.Player.Fire;
         fireInput.Enable();
         fireInput.performed += Fire;
@@ -49,6 +53,7 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         moveInput.Disable();
+        lookInput.Disable();
         fireInput.Disable();
         exitInput.Disable();    
     }
@@ -76,18 +81,45 @@ public class Player : MonoBehaviour
     }
     void PlayerLookAtMouse()
     {
-        Plane playerPlane = new Plane(Vector3.up, childBody.position);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        float hitDistance;
+        Vector2 vector2 = lookInput.ReadValue<Vector2>();
 
-        if (playerPlane.Raycast(ray, out hitDistance))
-        {
+        if (vector2 == Vector2.zero)
+            return;
 
-            Vector3 targetPoint = ray.GetPoint(hitDistance);
-            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - childBody.position);
+            float dot = Vector3.Dot(Vector2.up, vector2.normalized);
 
-            childBody.rotation = Quaternion.Slerp(childBody.rotation, targetRotation, turnSpeed * Time.deltaTime);
-        }
+        float angle = Mathf.Rad2Deg * Mathf.Acos(dot);
+
+        childBody.rotation = Quaternion.Euler(0, angle, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Plane playerPlane = new Plane(Vector3.up, childBody.position);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        //float hitDistance;
+
+        //if (playerPlane.Raycast(ray, out hitDistance))
+        //{
+
+        //    Vector3 targetPoint = ray.GetPoint(hitDistance);
+        //    Quaternion targetRotation = Quaternion.LookRotation(targetPoint - childBody.position);
+
+        //    childBody.rotation = Quaternion.Slerp(childBody.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        //}
     }
 }
