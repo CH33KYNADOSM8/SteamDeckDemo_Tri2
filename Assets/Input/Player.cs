@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
     [SerializeField] Transform childBody;
 
     private ShootProjectile shootProjectile;
+    private float turnSpeed = 10f;
 
     public float moveSpeed = 100f;
-    public float turnSpeed = 5f;
 
     private void Awake()
     {
@@ -81,45 +81,32 @@ public class Player : MonoBehaviour
     }
     void PlayerLookAtMouse()
     {
+        Plane playerPlane = new Plane(Vector3.up, childBody.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+        float hitDistance;
+
+        if (playerPlane.Raycast(ray, out hitDistance))
+        {
+
+            Vector3 targetPoint = ray.GetPoint(hitDistance);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - childBody.position);
+
+            childBody.rotation = Quaternion.Slerp(childBody.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
+    }
+
+    void PlayerRotationJoystick()
+    {
         Vector2 vector2 = lookInput.ReadValue<Vector2>();
 
         if (vector2 == Vector2.zero)
             return;
 
-            float dot = Vector3.Dot(Vector2.up, vector2.normalized);
+        float dot = Vector3.Dot(Vector2.up, vector2.normalized);
 
         float angle = Mathf.Rad2Deg * Mathf.Acos(dot);
 
         childBody.rotation = Quaternion.Euler(0, angle, 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Plane playerPlane = new Plane(Vector3.up, childBody.position);
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //float hitDistance;
-
-        //if (playerPlane.Raycast(ray, out hitDistance))
-        //{
-
-        //    Vector3 targetPoint = ray.GetPoint(hitDistance);
-        //    Quaternion targetRotation = Quaternion.LookRotation(targetPoint - childBody.position);
-
-        //    childBody.rotation = Quaternion.Slerp(childBody.rotation, targetRotation, turnSpeed * Time.deltaTime);
-        //}
     }
 }
