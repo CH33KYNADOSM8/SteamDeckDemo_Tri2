@@ -14,7 +14,7 @@ public class EnemyBase : MonoBehaviour
     float enemyAttackTimer = 1;
     bool canEnemyAttack = true;
 
-    Vector3 playerPosition => Movement.Instance.transform.position;
+    Vector3 playerPosition => Player.Instance.transform.position;
 
 
     private void Start()

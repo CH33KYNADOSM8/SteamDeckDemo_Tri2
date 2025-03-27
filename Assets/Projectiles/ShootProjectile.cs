@@ -6,22 +6,12 @@ using UnityEngine;
 public class ShootProjectile : MonoBehaviour
 {
     // Create the variables for the projectiles mechanics.
+    [SerializeField] Transform firePoint;
     public ObjectPool projectilePool;                                 // Reference to the object inside of the projectile pool
     public float shootSpeed = 20f;                                    // Determines the speed at which the object travels
 
     private float nextTimeToShoot = 0;                                // Variable for the countdown before player is allowed to shoot again
     private float fireRate = 1;                                       // Variable to add to the timer before the player is allowed to shoot again
-
-
-    // Checks to see if the player has pressed the shoot button, if they have, spawn the projectile with the correct settings for it.
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Spawn();
-        }
-    }
-
 
     /*
      * Check to see if the timer has run out so the player can shoot again, if not, do nothing.
@@ -37,12 +27,12 @@ public class ShootProjectile : MonoBehaviour
      * Then cerate the spawn position of the object (in front of the player).
      * Add a veclocity to the object so it moves at the rate of the shoot speed variable.
      */ 
-    void Spawn()
+    public void Spawn()
     {
         if (nextTimeToShoot > Time.time)
             return;
 
-        Projectile firebolt = projectilePool.GetObject<Projectile>();
+        Projectile firebolt = projectilePool.GetObject<Projectile>();   
 
         if (firebolt == null)
         {
@@ -51,10 +41,10 @@ public class ShootProjectile : MonoBehaviour
 
         nextTimeToShoot = Time.time + fireRate;
 
-        Vector3 spawnPosition = transform.position + transform.forward * 1.05f;
+        Vector3 spawnPosition = firePoint.position + firePoint.forward;
 
         firebolt.transform.position = spawnPosition;
 
-        firebolt.Rigidbody.velocity = transform.forward * shootSpeed;
+        firebolt.Rigidbody.velocity = firePoint.forward * shootSpeed;
     }
 }
