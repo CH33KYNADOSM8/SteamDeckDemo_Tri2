@@ -51,7 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   childBody: {fileID: 4001250007667301382}
   moveSpeed: 10
-  turnSpeed: 5
 --- !u!114 &2140214792856767018
 MonoBehaviour:
   m_ObjectHideFlags: 0

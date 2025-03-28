@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour
     private float currentHealth;
 
     [SerializeField] float attackDamage = 10;
+    public AudioSource attackSound;
     float enemyAttackTimer = 1;
     bool canEnemyAttack = true;
 
@@ -71,9 +72,11 @@ public class EnemyBase : MonoBehaviour
      */
     private bool AttackPlayer()
     {
-        if (CheckDistanceFromPlayer() <= 2)
+        if (CheckDistanceFromPlayer() <= 3)
         {
             PlayerStats.Instance.playerHealth -= attackDamage;
+            print(PlayerStats.Instance.playerHealth);
+            attackSound.Play();
             canEnemyAttack = false;
         }
 

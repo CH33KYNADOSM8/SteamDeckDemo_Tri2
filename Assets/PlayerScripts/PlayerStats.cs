@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -32,7 +33,9 @@ public class PlayerStats : MonoBehaviour
     {
         if (playerHealth <= 0)
         {
+            GameManager.Instance.StopPlayingMusic();
             Destroy(gameObject);
+            SceneManager.LoadScene("Death Menu");
         }
 
         IncreaseXpAmountNeeded();

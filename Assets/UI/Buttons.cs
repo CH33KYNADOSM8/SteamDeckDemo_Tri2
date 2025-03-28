@@ -9,6 +9,12 @@ public class Buttons : MonoBehaviour
     public void PlayButton()
     {
         SceneManager.LoadScene("Game");
+        GameManager.Instance.PlayMusic();
+    }
+
+    public void ProjectSadCat()
+    {
+        SceneManager.LoadScene("Teaser Scene");
     }
 
     public void QuitButton()

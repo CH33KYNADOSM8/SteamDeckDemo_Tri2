@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,8 +18,8 @@ public class EnemyManager : MonoBehaviour
 
     public static Action<EnemyBase> OnEnemyKilled;
 
-    // Create enemies at the start of the game.
-    private void Start()
+    //Create enemies at the start of the game.
+    private void Awake()
     {
         CreateEnemy();
     }
@@ -54,10 +56,10 @@ public class EnemyManager : MonoBehaviour
             CreateEnemy();
         }
     }
-    private void CreateEnemy()
+    public void CreateEnemy()
     {
-       // for (int i = 0; i < 3; i++)
-       // {
+       //for (int i = 0; i < 3; i++)
+       //{
             float randomZCoordinates = Random.Range(-13, 23);
             float randomXCoordinates = Random.Range(-18, 19);
             Vector3 randomPosition = new Vector3(randomXCoordinates, 1, randomZCoordinates);
@@ -65,7 +67,7 @@ public class EnemyManager : MonoBehaviour
             EnemyBase enemyInstance = Instantiate(enemy, randomPosition, Quaternion.identity);
 
             enemyList.Add(enemyInstance);
-      //  }
+       //}
     }
 
     public float GetEnemyListCount()
