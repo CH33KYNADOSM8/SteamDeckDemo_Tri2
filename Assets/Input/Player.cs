@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class Player : MonoBehaviour
 {
+
     public static Player Instance { get; private set; }
 
+    SystemInfo systemInfo;
     RickyRolls playerInput;
     InputAction moveInput, lookInput, fireInput, exitInput;
     [SerializeField] Transform childBody;
 
     private ShootProjectile shootProjectile;
     private float turnSpeed = 10f;
+    string device;
 
     public float moveSpeed = 100f;
 
@@ -62,10 +66,17 @@ public class Player : MonoBehaviour
     {
         Vector2 vectorInput = moveInput.ReadValue<Vector2>();
 
-        //Debug.Log("input is " + vectorInput.x + "x and " + vectorInput.y);
-
         transform.Translate(new Vector3(vectorInput.x, 0, vectorInput.y) * Time.deltaTime * moveSpeed);
-        PlayerLookAtMouse();
+
+        if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            PlayerLookAtMouse();
+        }
+        else if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            PlayerRotationJoystick();
+        }
+
     }
 
 
@@ -98,14 +109,20 @@ public class Player : MonoBehaviour
 
     void PlayerRotationJoystick()
     {
-        Vector2 vector2 = lookInput.ReadValue<Vector2>();
+        Vector2 input = lookInput.ReadValue<Vector2>();
 
-        if (vector2 == Vector2.zero)
+        if (input == Vector2.zero)
             return;
+        
 
-        float dot = Vector3.Dot(Vector2.up, vector2.normalized);
+        float dot = Vector3.Dot(Vector2.up, input.normalized);
 
         float angle = Mathf.Rad2Deg * Mathf.Acos(dot);
+
+        if (input.x < 0)
+        {
+            angle = -angle;
+        }
 
         childBody.rotation = Quaternion.Euler(0, angle, 0);
     }

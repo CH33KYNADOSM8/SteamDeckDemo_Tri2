@@ -49,7 +49,15 @@ public class GameManager : MonoBehaviour
     {
         if (enemyManager.GetEnemyListCount() == 0)
         {
-            GoToNextRound();
+           if (currentRound <= 20)
+            {
+                GoToNextRound();
+            } 
+            else
+            {
+                WinGame();
+            }
+            
         }
     }
 
@@ -66,5 +74,10 @@ public class GameManager : MonoBehaviour
     public void StopPlayingMusic()
     {
         audioSource.Stop();
+    }
+
+    void WinGame()
+    {
+        SceneManager.LoadScene("Win Screen");
     }
 }
